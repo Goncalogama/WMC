@@ -5,18 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Vital Tradition of Naming Baby Gorillas in Rwanda</title>
   <script src="https://d3js.org/d3.v6.min.js"></script>
-  <script src="https://unpkg.com/topojson-client@3"></script>
   <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      color: #111;
+    }
     body {
       font-family: Georgia, serif;
-      margin: 0;
-      background-color: #f2f2f2;
-      color: #111;
     }
     .container {
       max-width: 700px;
       margin: 0 auto;
-      background: #fff;
       padding: 40px 25px;
       line-height: 1.7;
     }
@@ -42,11 +43,24 @@
     }
     #map-container {
       width: 100%;
-      height: 300px;
+      height: 400px;
+      position: relative;
     }
     svg {
       width: 100%;
       height: 100%;
+    }
+    .tooltip {
+      position: absolute;
+      background: white;
+      padding: 5px 10px;
+      border: 1px solid black;
+      border-radius: 4px;
+      display: none;
+      pointer-events: none;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      z-index: 10;
     }
   </style>
 </head>
@@ -63,6 +77,7 @@
     <div class="map">
       <strong>Explore:</strong> <em>Volcanoes National Park and protected areas</em>
       <div id="map-container"></div>
+      <div class="tooltip" id="tooltip"></div>
     </div>
 
     <h2>Cultural Meaning, Global Impact</h2>
@@ -92,38 +107,44 @@
   </div>
 
   <script>
-    const width = 700, height = 300;
+    const width = 700, height = 400;
+    const tooltip = d3.select("#tooltip");
+
     const svg = d3.select("#map-container")
       .append("svg")
       .attr("width", width)
       .attr("height", height);
 
-    const projection = d3.geoNaturalEarth1()
-      .scale(180)
+    const projection = d3.geoMercator()
+      .center([30.06, -1.94])
+      .scale(6500)
       .translate([width / 2, height / 2]);
 
     const path = d3.geoPath().projection(projection);
 
-    d3.json("https://unpkg.com/world-atlas@2.0.2/countries-50m.json").then(worldData => {
-      const countries = topojson.feature(worldData, worldData.objects.countries);
-      svg.selectAll(".country")
-        .data(countries.features)
-        .enter()
-        .append("path")
-        .attr("class", "country")
-        .attr("fill", "#ccc")
-        .attr("stroke", "#333")
-        .attr("d", path);
+    const protectedAreas = [
+      { name: "Volcanoes National Park", coords: [29.53, -1.47], note: "Home to endangered mountain gorillas" },
+      { name: "Nyungwe Forest", coords: [29.2, -2.48], note: "Biodiversity hotspot with 13 primate species" },
+      { name: "Akagera National Park", coords: [30.7, -1.8], note: "Rwanda's Big Five safari destination" }
+    ];
 
-      // Highlight Rwanda (country code 646)
-      const rwandaFeature = countries.features.find(f => f.id === "646");
-      if (rwandaFeature) {
-        svg.append("path")
-          .datum(rwandaFeature)
-          .attr("fill", "#f90")
-          .attr("d", path);
-      }
-    });
+    svg.selectAll("circle")
+      .data(protectedAreas)
+      .enter()
+      .append("circle")
+      .attr("cx", d => projection(d.coords)[0])
+      .attr("cy", d => projection(d.coords)[1])
+      .attr("r", 7)
+      .attr("fill", "#0077b6")
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 1.5)
+      .on("mouseover", function(event, d) {
+        tooltip.style("display", "block")
+          .html(`<strong>${d.name}</strong><br>${d.note}`)
+          .style("left", (event.pageX + 10) + "px")
+          .style("top", (event.pageY - 28) + "px");
+      })
+      .on("mouseout", () => tooltip.style("display", "none"));
   </script>
 </body>
 </html>
