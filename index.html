@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Vital Tradition of Naming Baby Gorillas in Rwanda</title>
   <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://unpkg.com/topojson-client@3"></script>
   <style>
     html, body {
       margin: 0;
@@ -128,6 +129,19 @@
       .translate([width / 2, height / 2]);
 
     const path = d3.geoPath().projection(projection);
+
+    d3.json("https://unpkg.com/world-atlas@2.0.2/countries-50m.json").then(worldData => {
+      const countries = topojson.feature(worldData, worldData.objects.countries);
+
+      svg.selectAll(".country")
+        .data(countries.features)
+        .enter()
+        .append("path")
+        .attr("class", "country")
+        .attr("fill", "#e0e0e0")
+        .attr("stroke", "#999")
+        .attr("d", path);
+    });
 
     const protectedAreas = [
       { name: "Volcanoes National Park", coords: [29.53, -1.47], note: "Home to endangered mountain gorillas" },
