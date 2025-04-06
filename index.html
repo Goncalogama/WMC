@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Vital Tradition of Naming Baby Gorillas in Rwanda</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-sA+4ps++TZhJ7XG0v1GdZb+DrmLtDuwZP+G2ZgXkJh0=" crossorigin=""/>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://unpkg.com/topojson-client@3"></script>
   <style>
     body {
       font-family: Georgia, serif;
@@ -39,11 +40,13 @@
       margin: 30px 0;
       border-left: 4px solid #0077b6;
     }
-    #map {
-      height: 300px;
+    #map-container {
       width: 100%;
-      border-radius: 5px;
-      margin-top: 10px;
+      height: 300px;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
     }
   </style>
 </head>
@@ -59,7 +62,7 @@
 
     <div class="map">
       <strong>Explore:</strong> <em>Volcanoes National Park and protected areas</em>
-      <div id="map"></div>
+      <div id="map-container"></div>
     </div>
 
     <h2>Cultural Meaning, Global Impact</h2>
@@ -88,20 +91,39 @@
     <p><strong>Join the story.</strong> Explore Rwanda, support conservation, and witness the naming of the wild’s newest guardians.</p>
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-v3xfKXtZSk6IeYdVY3A65q7Pz3Z5I6LG49NjXlE0CjU=" crossorigin=""></script>
   <script>
-    window.onload = () => {
-      const map = L.map('map').setView([-1.4733, 29.5386], 10);
-  
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
-      }).addTo(map);
-  
-      L.marker([-1.4733, 29.5386]).addTo(map)
-        .bindPopup('Volcanoes National Park')
-        .openPopup();
-    };
-  </script>
+    const width = 700, height = 300;
+    const svg = d3.select("#map-container")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
 
+    const projection = d3.geoNaturalEarth1()
+      .scale(180)
+      .translate([width / 2, height / 2]);
+
+    const path = d3.geoPath().projection(projection);
+
+    d3.json("https://unpkg.com/world-atlas@2.0.2/countries-50m.json").then(worldData => {
+      const countries = topojson.feature(worldData, worldData.objects.countries);
+      svg.selectAll(".country")
+        .data(countries.features)
+        .enter()
+        .append("path")
+        .attr("class", "country")
+        .attr("fill", "#ccc")
+        .attr("stroke", "#333")
+        .attr("d", path);
+
+      // Highlight Rwanda (country code 646)
+      const rwandaFeature = countries.features.find(f => f.id === "646");
+      if (rwandaFeature) {
+        svg.append("path")
+          .datum(rwandaFeature)
+          .attr("fill", "#f90")
+          .attr("d", path);
+      }
+    });
+  </script>
 </body>
 </html>
