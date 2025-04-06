@@ -62,6 +62,11 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
       z-index: 10;
     }
+    #name-result {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #0077b6;
+    }
   </style>
 </head>
 <body>
@@ -97,7 +102,9 @@
     <p>Visitors lucky enough to attend in person witness traditional drumming, storytelling, and conservation talks, all set against the backdrop of Rwanda’s lush highlands. Visuals from the event are breathtaking—newborn gorillas nestled in their mothers' arms, dignitaries in vibrant attire, and rangers proudly announcing each new name.</p>
 
     <div class="interactive">
-      <strong>Try It Yourself:</strong> <em>Name Generator coming soon — discover your own gorilla name and its meaning!</em>
+      <strong>Try It Yourself:</strong> <em>Click to discover your gorilla name and its meaning!</em><br><br>
+      <button onclick="generateName()">Generate Gorilla Name</button>
+      <div id="name-result"></div>
     </div>
 
     <h2>Looking Ahead</h2>
@@ -145,6 +152,21 @@
           .style("top", (event.pageY - 28) + "px");
       })
       .on("mouseout", () => tooltip.style("display", "none"));
+
+    function generateName() {
+      const names = [
+        "Amahoro (Peace)",
+        "Ishyaka (Passion)",
+        "Ubuzima (Life)",
+        "Umurage (Heritage)",
+        "Inzira (Path)",
+        "Agaciro (Dignity)",
+        "Ubumwe (Unity)",
+        "Ingufu (Strength)"
+      ];
+      const selected = names[Math.floor(Math.random() * names.length)];
+      document.getElementById("name-result").innerText = `Your gorilla name is: ${selected}`;
+    }
   </script>
 </body>
 </html>
