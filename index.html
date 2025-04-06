@@ -15,12 +15,23 @@
     }
     body {
       font-family: Georgia, serif;
+      border-left: 20px solid #d1d5db;
+      border-right: 20px solid #d1d5db;
+    }
+    .header-bar {
+      background-color: #111;
+      color: white;
+      padding: 15px 20px;
+      font-size: 1.6rem;
+      font-weight: bold;
+      text-align: center;
     }
     .container {
       max-width: 1000px;
       margin: 0 auto;
       padding: 40px 30px;
       line-height: 1.7;
+      background-color: #ffffff;
     }
     h1, h2 {
       font-weight: bold;
@@ -69,9 +80,22 @@
       font-weight: bold;
       color: #0077b6;
     }
+    .video-box {
+      background: #111;
+      padding: 15px;
+      margin: 40px 0;
+      border-radius: 8px;
+      color: white;
+    }
+    .footer-bar {
+      background-color: #111;
+      height: 20px;
+      margin-top: 40px;
+    }
   </style>
 </head>
 <body>
+  <div class="header-bar">The Vital Tradition of Naming Baby Gorillas in Rwanda</div>
   <div class="container">
   <h1 style="margin-bottom: 30px;">The Vital Tradition of Naming Baby Gorillas in Rwanda</h1>
   <div style="display: flex; align-items: flex-start; gap: 30px; flex-wrap: wrap;">
@@ -135,17 +159,18 @@
     </audio>
   </div>
 
-  <div style="margin: 30px 0;">
-    <video controls style="max-width: 100%; border-radius: 6px;">
+  <div class="video-box">
+    <p style="margin: 0 0 10px; font-style: italic;">Watch the emotional expressions of villagers during Kwita Izina in this exclusive clip:</p>
+    <video controls style="width: 100%; border-radius: 6px;">
       <source src="VIDSun_Apr_06_15_50_11_GMT02_00_2025.jpg.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <div class="caption">Screen Recording of a Gorilla 3D Model</div>
   </div>
     
   <p><strong>Join the story.</strong> Explore Rwanda, support conservation, and witness the naming of the wild’s newest guardians.</p>
 </div>
-
+<div class="footer-bar"></div>
+  
   <script>
     const width = 1000, height = 500;
     const tooltip = d3.select("#tooltip");
