@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Vital Tradition of Naming Baby Gorillas in Rwanda</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-sA+4ps++TZhJ7XG0v1GdZb+DrmLtDuwZP+G2ZgXkJh0=" crossorigin=""/>
   <style>
     body {
       font-family: Georgia, serif;
@@ -38,6 +39,12 @@
       margin: 30px 0;
       border-left: 4px solid #0077b6;
     }
+    #map {
+      height: 300px;
+      width: 100%;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -51,7 +58,8 @@
     <p>What began in 2005 has grown into an internationally celebrated occasion, attracting conservationists, celebrities, and travelers alike. With every name given, Rwanda strengthens its commitment to monitoring and protecting its most iconic inhabitants—mountain gorillas.</p>
 
     <div class="map">
-      <strong>Explore:</strong> <em>Interactive map of Volcanoes National Park and surrounding protected areas coming soon.</em>
+      <strong>Explore:</strong> <em>Volcanoes National Park and protected areas</em>
+      <div id="map"></div>
     </div>
 
     <h2>Cultural Meaning, Global Impact</h2>
@@ -79,5 +87,18 @@
 
     <p><strong>Join the story.</strong> Explore Rwanda, support conservation, and witness the naming of the wild’s newest guardians.</p>
   </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-v3xfKXtZSk6IeYdVY3A65q7Pz3Z5I6LG49NjXlE0CjU=" crossorigin=""></script>
+  <script>
+    const map = L.map('map').setView([-1.4733, 29.5386], 10); // Volcanoes National Park coordinates
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.marker([-1.4733, 29.5386]).addTo(map)
+      .bindPopup('Volcanoes National Park')
+      .openPopup();
+  </script>
 </body>
 </html>
